@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Komunitas Hacker</title>
+  <style>
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      margin-top: 80px;
+    }
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 10px;
+      width: 250px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 20px;
+      font-size: 1em;
+    }
+    button, a.join-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #00ff00;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ff00;
+      transition: background 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button:hover, a.join-button:hover {
+      background-color: black;
+      color: #00ff00;
+      border: 2px solid #00ff00;
+    }
+    #step2, #welcome {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://b.top4top.io/p_3404562t20.jpg" alt="Foto Profil" class="profile-pic">
+    <h1>DarkNet Syndicate</h1>
+
+    <!-- Step 1: Tanya Nama -->
+    <p id="step1">Masukkan nama kamu:</p>
+    <input type="text" id="nameInput" placeholder="Nama kamu...">
+    <br>
+    <button onclick="nextStep()">Lanjut</button>
+
+    <!-- Step 2: Tanya Umur -->
+    <div id="step2">
+      <p>Berapa umur kamu?</p>
+      <input type="number" id="ageInput" placeholder="Umur kamu...">
+      <br>
+      <button onclick="submitAll()">Gabung</button>
+    </div>
+
+    <!-- Welcome Message -->
+    <div id="welcome">
+      <p id="greeting"></p>
+      <a id="join-btn" href="#" onclick="confirmJoin()" class="join-button">Gabung Sekarang</a>
+    </div>
+  </div>
+
+  <script>
+    const BOT_TOKEN = 'ISI_TOKEN_BOT_KAMU';
+    const CHAT_ID = 'ISI_CHAT_ID_GRUP';
+
+    function nextStep() {
+      const name = document.getElementById('nameInput').value.trim();
+      if (name === "") {
+        alert("Tolong masukkan nama dulu!");
+      } else {
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('nameInput').style.display = 'none';
+        document.querySelector('button').style.display = 'none';
+        document.getElementById('step2').style.display = 'block';
+      }
+    }
+
+    function submitAll() {
+      const name = document.getElementById('nameInput').value.trim();
+      const age = document.getElementById('ageInput').value.trim();
+      if (age === "" || isNaN(age)) {
+        alert("Tolong masukkan umur dengan benar!");
+      } else {
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('greeting').innerText = `Selamat datang, ${name} (${age} tahun)!`;
+        document.getElementById('welcome').style.display = 'block';
+      }
+    }
+
+    function confirmJoin() {
+      alert("Ingat, jangan buat onar di grup ya, nanti di-*ban* admin hahaha!");
+
+      const name = document.getElementById('nameInput').value.trim();
+      const age = document.getElementById('ageInput').value.trim();
+      const message = `Ada anggota baru bergabung!\n\nNama: ${name}\nUmur: ${age} tahun`;
+
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Sukses kirim ke grup:', data);
+        window.location.href = "https://chat.whatsapp.com/CZcMAG9LrF9KEPyKfGsmQO";
+      })
+      .catch(error => {
+        console.error('Gagal kirim:', error);
+        window.location.href = "https://chat.whatsapp.com/CZcMAG9LrF9KEPyKfGsmQO"; // Tetap arahkan walau error
+      });
+    }
+  </script>
+</body>
+</html>
